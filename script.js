@@ -1,28 +1,24 @@
-// ウェブサイトのJavaScriptファイル
-// 現在はシンプルな機能を想定しているため、コードは最小限です。
-// 将来的に、以下のような機能を追加できます。
+document.addEventListener('DOMContentLoaded', () => {
+    // スクロール時のフェードインアニメーション
+    const featureItems = document.querySelectorAll('.feature-item');
 
-// 例1: スクロール時に要素をフェードインさせる
-// document.addEventListener('DOMContentLoaded', () => {
-//     const observer = new IntersectionObserver(entries => {
-//         entries.forEach(entry => {
-//             if (entry.isIntersecting) {
-//                 entry.target.classList.add('visible');
-//                 observer.unobserve(entry.target);
-//             }
-//         });
-//     });
-// 
-//     document.querySelectorAll('.feature-item').forEach(item => {
-//         observer.observe(item);
-//     });
-// });
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // 要素が見えたら'visible'クラスを追加
+                entry.target.classList.add('visible');
+                // 一度表示されたら監視を停止
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        // ビューポートの80%が見えたら発火
+        threshold: 0.2 
+    });
 
-// 例2: ダークモード/ライトモードの切り替え機能
-// const toggleButton = document.getElementById('theme-toggle');
-// toggleButton.addEventListener('click', () => {
-//     document.body.classList.toggle('dark-mode');
-// });
+    featureItems.forEach(item => {
+        observer.observe(item);
+    });
 
-// コンソールにメッセージを出力して、スクリプトが正しく読み込まれているか確認できます
-console.log('script.js が正常に読み込まれました！');
+    console.log('script.js が正常に読み込まれ、アニメーションが設定されました！');
+});
