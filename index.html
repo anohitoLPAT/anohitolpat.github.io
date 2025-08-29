@@ -23,6 +23,7 @@
             background-color: var(--background-color);
             color: var(--text-color);
             line-height: 1.6;
+            overflow-x: hidden; /* 横スクロールバーを防ぐ */
         }
 
         .container {
@@ -44,10 +45,18 @@
             font-size: 2.8em;
             color: var(--header-color);
             margin-bottom: 5px;
+            opacity: 0; /* 初期状態は非表示 */
+            transform: translateY(20px); /* 初期位置を少し下げる */
+            animation: fadeInTranslate var(--transition-speed) ease-out forwards;
+            animation-delay: 0.2s; /* アニメーションの開始を遅らせる */
         }
 
         header p {
             color: #888;
+            opacity: 0; /* 初期状態は非表示 */
+            transform: translateY(20px); /* 初期位置を少し下げる */
+            animation: fadeInTranslate var(--transition-speed) ease-out forwards;
+            animation-delay: 0.4s; /* アニメーションの開始を遅らせる */
         }
 
         .content {
@@ -78,6 +87,15 @@
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
             transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            opacity: 0; /* 初期状態は非表示 */
+            transform: translateY(30px); /* 初期位置を少し下げる */
+        }
+        
+        /* JavaScriptで追加されるvisibleクラス用 */
+        .feature-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
 
         .feature-item:hover {
@@ -105,11 +123,14 @@
             font-weight: bold;
             border-radius: 8px;
             transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+            animation: pulse 1.5s infinite; /* 脈動アニメーション */
+            animation-delay: 0.6s; /* アニメーションの開始を遅らせる */
         }
 
         .invite-button:hover {
             background-color: #4c56c2;
             transform: scale(1.05);
+            animation: none; /* ホバー時は脈動を停止 */
         }
 
         footer {
@@ -118,6 +139,24 @@
             margin-top: 20px;
             color: #888;
             font-size: 0.9em;
+        }
+
+        /* キーフレームアニメーション */
+        @keyframes fadeInTranslate {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
@@ -173,9 +212,10 @@
     </div>
 
     <footer>
-        <p>&copy; 2025 Anohito. All Rights Reserved.</p>
+        <p>&copy; 2025 AnoBOT. All Rights Reserved.</p>
     </footer>
 </div>
 
+<script src="script.js"></script>
 </body>
 </html>
