@@ -3,73 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AnoBOT - 多機能Discordボット</title>
+    <title>AnoBOT - あなたのDiscordサーバーをより便利に、より安全に</title>
     <style>
+        :root {
+            --primary-color: #5865F2; /* Discord Blue */
+            --background-color: #f0f4f8;
+            --container-bg-color: #fff;
+            --text-color: #333;
+            --header-color: #4a4a4a;
+            --highlight-color: #007bff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --transition-speed: 0.3s;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f4f8;
-            color: #333;
+            background-color: var(--background-color);
+            color: var(--text-color);
             line-height: 1.6;
         }
+
         .container {
             max-width: 960px;
             margin: 40px auto;
             padding: 20px;
-            background-color: #fff;
+            background-color: var(--container-bg-color);
             border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 20px var(--shadow-color);
         }
+
         header {
             text-align: center;
             padding-bottom: 20px;
             border-bottom: 2px solid #e2e2e2;
         }
+
         header h1 {
             font-size: 2.8em;
-            color: #5b5b5b;
+            color: var(--header-color);
             margin-bottom: 5px;
         }
+
         header p {
             color: #888;
         }
+
         .content {
             padding: 30px 0;
         }
+
         .section {
             margin-bottom: 40px;
         }
+
         h2 {
             font-size: 2em;
-            color: #3a3a3a;
-            border-left: 5px solid #007bff;
+            color: var(--header-color);
+            border-left: 5px solid var(--primary-color);
             padding-left: 10px;
             margin-bottom: 20px;
         }
+
         .feature-list {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
         }
+
         .feature-item {
             background-color: #f9f9f9;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            flex: 1 1 calc(33.333% - 40px);
-            box-sizing: border-box;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
         }
+
         .feature-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 15px var(--shadow-color);
         }
+
         .feature-item h3 {
             font-size: 1.2em;
-            color: #007bff;
+            color: var(--highlight-color);
             margin-top: 0;
         }
+
         .invite-button {
             display: block;
             width: 80%;
@@ -77,18 +98,20 @@
             margin: 20px auto;
             padding: 15px 20px;
             text-align: center;
-            background-color: #5865F2; /* Discord's primary color */
+            background-color: var(--primary-color);
             color: #fff;
             text-decoration: none;
             font-size: 1.2em;
             font-weight: bold;
             border-radius: 8px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
+            transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
         }
+
         .invite-button:hover {
             background-color: #4c56c2;
             transform: scale(1.05);
         }
+
         footer {
             text-align: center;
             padding-top: 20px;
@@ -104,7 +127,7 @@
     <header>
         <h1>AnoBOT</h1>
         <p>あなたのDiscordサーバーをより便利に、より安全に。</p>
-        <a href="https://discord.com/api/oauth2/authorize?client_id=1397088007705596035&permissions=8&scope=bot%20applications.commands" class="invite-button">
+        <a href="https://discord.com/api/oauth2/authorize?client_id=YOUR_CLIENT_ID&permissions=8&scope=bot%20applications.commands" class="invite-button">
             AnoBOTをサーバーに招待する
         </a>
     </header>
