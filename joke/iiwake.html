@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>完璧な言い訳ジェネレーター</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffebee;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #c62828;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #b71c1c;
+        }
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        #generate-button {
+            background-color: #c62828;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .excuse-output {
+            margin-top: 30px;
+            background-color: #ffcdd2;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            border-left: 5px solid #e53935;
+        }
+        .excuse-output h2 {
+            color: #b71c1c;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>完璧な言い訳ジェネレーター</h1>
+    <p>あなたの失敗に対する、完璧な言い訳を生成します。</p>
+    <div class="input-group">
+        <label for="situation">あなたの状況</label>
+        <select id="situation">
+            <option value="late">遅刻した</option>
+            <option value="homework">宿題を忘れた</option>
+            <option value="meeting">会議の資料を忘れた</option>
+            <option value="call">電話に出なかった</option>
+        </select>
+    </div>
+    <button id="generate-button">言い訳を生成！</button>
+
+    <div id="excuse-result" class="excuse-output" style="display: none;">
+        <h2>完璧な言い訳</h2>
+        <p id="excuse-text"></p>
+    </div>
+</div>
+
+<script>
+    const generateButton = document.getElementById('generate-button');
+    const situationSelect = document.getElementById('situation');
+    const excuseResult = document.getElementById('excuse-result');
+    const excuseText = document.getElementById('excuse-text');
+
+    const excuses = {
+        late: [
+            '家にあったタイムマシンの調整に手間取ってしまい、予定よりも数分ずれてしまいました。',
+            '道を歩いていたら、異世界の入り口が開き、そこで迷子になってしまいまして…',
+            '私の時計が時間の概念を放棄してしまい、それに付き合っていたら遅刻しました。'
+        ],
+        homework: [
+            '昨夜、部屋の湿度と気圧が異常に高まり、宿題が分子レベルで霧散してしまいました。',
+            '宇宙人から「地球の宿題のデータをすべて消去せよ」という命令が下ったため、やむを得ず…',
+            '宿題が突然意識を持ち始め、「自分は自由になりたい」と叫んで窓から飛び出していったので、提出できません。'
+        ],
+        meeting: [
+            '資料が宇宙のブラックホールに吸い込まれたため、私の手元にありません。',
+            '資料に書かれていた情報が、すべて私の脳内に記憶されているので、あえて持ってきませんでした。',
+            '昨晩、妖精に資料を交換されてしまい、今手元にあるのは古代の地図だけです。'
+        ],
+        call: [
+            '電話に出ると、未来の私が「まだその電話に出るな」と警告してきたので、出られませんでした。',
+            '電話の着信音が、私にしか聞こえない呪文だったため、どうすることもできませんでした。',
+            'ちょうどそのとき、私の耳が一時的に別の次元に繋がってしまい、音を聞き取れませんでした。'
+        ]
+    };
+
+    generateButton.addEventListener('click', () => {
+        const situation = situationSelect.value;
+        const randomExcuse = excuses[situation][Math.floor(Math.random() * excuses[situation].length)];
+        
+        excuseText.textContent = randomExcuse;
+        excuseResult.style.display = 'block';
+    });
+</script>
+
+</body>
+</html>
