@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>未来の自分からのメールジェネレーター</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e8f5e9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #1b5e20;
+        }
+        .input-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+        #send-button {
+            background-color: #2e7d32;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .email-output {
+            margin-top: 30px;
+            background-color: #c8e6c9;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            border-left: 5px solid #4caf50;
+        }
+        .email-output h2 {
+            color: #1b5e20;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>未来の自分からのメール</h1>
+    <p>現在の悩みを入力すると、未来の自分から役に立たないメールが届きます。</p>
+    <div class="input-group">
+        <label for="problem">あなたの悩み</label>
+        <textarea id="problem" rows="4" placeholder="例: 人間関係の悩みが尽きません..."></textarea>
+    </div>
+    <button id="send-button">メールを送信！</button>
+
+    <div id="email-result" class="email-output" style="display: none;">
+        <h2>未来のあなたより</h2>
+        <p><strong>差出人:</strong> 未来の私 <br> <strong>件名:</strong> ${new Date().getFullYear()}年からのメッセージ</p>
+        <p id="email-body"></p>
+        <p>追伸：添付ファイルは意味がないので開かないでください。zipファイルもパスワードがありません。</p>
+    </div>
+</div>
+
+<script>
+    const sendButton = document.getElementById('send-button');
+    const problemInput = document.getElementById('problem');
+    const emailResult = document.getElementById('email-result');
+    const emailBody = document.getElementById('email-body');
+
+    const absurdMessages = [
+        '悩み？それよりも、今日の夕食に何を食べようか考えている。',
+        'あまり気にしなくていい。来週、美味しいラーメンに出会うから。',
+        'その悩みは解決しなかったが、違うことで悩んでいるから大丈夫。',
+        'その悩みは忘れた。最近はAIが仕事をしすぎて、暇で困っている。',
+        '大丈夫。数年後には、その悩みを抱えていた自分を笑っているよ。ただ、別のことで悩んでいるが。'
+    ];
+
+    sendButton.addEventListener('click', () => {
+        const problem = problemInput.value.trim();
+        const message = absurdMessages[Math.floor(Math.random() * absurdMessages.length)];
+        
+        emailBody.textContent = `拝啓\n\n元気ですか？\n\nあなたが悩んでいること、分かります。でも、その悩みについては特に何もアドバイスできません。\n\n${message}\n\n未来のことは分からないので、とりあえず今日の夕食について考えましょう。\n\n敬具`;
+        emailResult.style.display = 'block';
+    });
+</script>
+
+</body>
+</html>
