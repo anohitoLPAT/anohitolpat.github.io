@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>メールアドレス認証</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px;
+        }
+        .container h2 {
+            margin-bottom: 25px;
+            color: #333;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .input-group input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        #submit-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease-out;
+            position: relative;
+        }
+        #email-error, #email-success, #auth-message {
+            font-size: 14px;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+        #email-error, #auth-message {
+            color: red;
+        }
+        #email-success {
+            color: green;
+        }
+        .robot-check {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .robot-check input {
+            margin-right: 8px;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>メールアドレスの確認</h2>
+    <form>
+        <div class="input-group">
+            <label for="email">メールアドレス</label>
+            <input type="email" id="email" placeholder="@は使用できません" required>
+            <p id="email-error"></p>
+            <p id="email-success"></p>
+        </div>
+        <div class="input-group">
+            <label for="password">パスワード</label>
+            <input type="password" id="password" placeholder="最低100文字必要です..." required>
+        </div>
+        <div class="robot-check">
+            <input type="checkbox" id="robot-checkbox">
+            <label for="robot-checkbox">私はロボットではありません</label>
+        </div>
+        <button type="button" id="submit-button">送信</button>
+        <p id="auth-message"></p>
+    </form>
+</div>
+
+<script>
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const submitButton = document.getElementById('submit-button');
+    const emailError = document.getElementById('email-error');
+    const emailSuccess = document.getElementById('email-success');
+    const robotCheckbox = document.getElementById('robot-checkbox');
+    const authMessage = document.getElementById('auth-message');
+
+    // メールアドレス入力欄の検証
+    emailInput.addEventListener('input', () => {
+        const emailValue = emailInput.value;
+        if (emailValue.includes('@')) {
+            emailError.textContent = '@は使用できません';
+            emailSuccess.textContent = '';
+        } else if (emailValue.length > 0) {
+            emailError.textContent = '';
+            emailSuccess.textContent = '正しいメールアドレスの方式です';
+        } else {
+            emailError.textContent = '';
+            emailSuccess.textContent = '';
+        }
+    });
+
+    // パスワード入力欄にフォーカスが当たった時の処理
+    passwordInput.addEventListener('focus', () => {
+        const passwordHints = [
+            'パスワードは36文字以上必要です。',
+            'パスワードに絵文字は使えません。',
+            'パスワードは漢字のみでお願いします。',
+            'パスワードにはあなたの本名と年齢を入れてください。'
+        ];
+        const randomHint = passwordHints[Math.floor(Math.random() * passwordHints.length)];
+        passwordInput.placeholder = randomHint;
+    });
+
+    // パスワード入力欄からフォーカスが外れた時の処理
+    passwordInput.addEventListener('blur', () => {
+        passwordInput.placeholder = '最低100文字必要です...';
+    });
+
+    // 送信ボタンがマウスに近づくと逃げる処理
+    submitButton.addEventListener('mouseover', () => {
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        const buttonRect = submitButton.getBoundingClientRect();
+
+        let newX, newY;
+        let maxAttempts = 50;
+
+        do {
+            newX = Math.random() * (viewportWidth - buttonRect.width);
+            newY = Math.random() * (viewportHeight - buttonRect.height);
+            maxAttempts--;
+        } while (
+            (Math.abs(newX - buttonRect.left) < 150 || Math.abs(newY - buttonRect.top) < 150) &&
+            maxAttempts > 0
+        );
+
+        submitButton.style.position = 'fixed';
+        submitButton.style.left = `${newX}px`;
+        submitButton.style.top = `${newY}px`;
+    });
+    
+    // ロボットチェックボックスの処理
+    robotCheckbox.addEventListener('change', () => {
+        if (robotCheckbox.checked) {
+            authMessage.textContent = '「ロボットではありません」を信じることができませんでした。認証に失敗しました。';
+        } else {
+            authMessage.textContent = '';
+        }
+    });
+</script>
+
+</body>
+</html>
