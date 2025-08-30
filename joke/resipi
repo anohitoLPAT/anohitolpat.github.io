@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>完璧なレシピジェネレーター(ジョークサイト)</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7fa;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #00796b;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #004d40;
+        }
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+        #generate-button {
+            background-color: #00796b;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        #generate-button:hover {
+            background-color: #004d40;
+            transform: translateY(-2px);
+        }
+        .recipe-output {
+            margin-top: 30px;
+            background-color: #f1f8e9;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            border-left: 5px solid #8bc34a;
+        }
+        .recipe-output h2 {
+            color: #388e3c;
+        }
+        .recipe-output p {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>完璧なレシピジェネレーター</h1>
+    <p>あなたの冷蔵庫の謎の食材から、誰も想像できない至高の逸品を生成します。</p>
+
+    <div class="input-group">
+        <label for="ingredients">冷蔵庫にある食材をカンマ区切りで入力してください (例: 卵, バナナ, ごぼう)</label>
+        <textarea id="ingredients" rows="3" placeholder="食材を入力..."></textarea>
+    </div>
+
+    <div class="input-group">
+        <label for="mood">今日の気分は？</label>
+        <select id="mood">
+            <option value="happy">元気を出したい</option>
+            <option value="tired">疲れている</option>
+            <option value="adventurous">冒険したい</option>
+            <option value="normal">何もしたくない</option>
+        </select>
+    </div>
+
+    <button id="generate-button">奇跡のレシピを生成！</button>
+
+    <div id="recipe-result" class="recipe-output" style="display: none;">
+        <h2 id="recipe-title"></h2>
+        <p><strong>材料:</strong> <span id="recipe-ingredients"></span></p>
+        <p><strong>調理法:</strong> <span id="recipe-instructions"></span></p>
+        <p><strong>調理時間:</strong> <span id="recipe-time"></span></p>
+    </div>
+</div>
+
+<script>
+    const generateButton = document.getElementById('generate-button');
+    const ingredientsInput = document.getElementById('ingredients');
+    const moodSelect = document.getElementById('mood');
+    const recipeResult = document.getElementById('recipe-result');
+    const recipeTitle = document.getElementById('recipe-title');
+    const recipeIngredients = document.getElementById('recipe-ingredients');
+    const recipeInstructions = document.getElementById('recipe-instructions');
+    const recipeTime = document.getElementById('recipe-time');
+
+    const instructionsData = {
+        happy: [
+            '材料を混ぜ合わせ、満面の笑みを浮かべながら熱湯で3秒煮込む。',
+            '好きな歌を歌いながら、太陽の光で4分間加熱する。',
+            '材料を星空に向かって投げ、落ちてきたものを拾って完成。',
+        ],
+        tired: [
+            '材料をすべてミキサーに入れ、疲れていることを叫びながら高速で回す。',
+            '目を閉じて3分間祈り、そのまま食べる。',
+            '材料を冷蔵庫にしまい、寝て起きてから料理を始める。',
+        ],
+        adventurous: [
+            '材料を宇宙船の燃料として使用し、その副産物で料理する。',
+            '材料を火山の噴火口に投げ込み、溶岩で調理する。',
+            'まず過去に戻り、調理法を学ぶことから始める。',
+        ],
+        normal: [
+            '材料を皿に乗せ、何もせず眺める。これで完成です。',
+            '調理法を忘れてしまったので、好きなように調理してください。',
+            '全ての材料を適当に混ぜ合わせ、そのまま捨ててください。'
+        ]
+    };
+
+    const timeData = [
+        '無限大',
+        '3光年',
+        '2週間後',
+        '宇宙の摂理が許せば3分',
+        'タイムトラベルが必要です'
+    ];
+
+    generateButton.addEventListener('click', () => {
+        const ingredients = ingredientsInput.value.split(',').map(item => item.trim()).filter(item => item !== '');
+        const mood = moodSelect.value;
+
+        if (ingredients.length === 0) {
+            alert('食材を何か入力してください！');
+            return;
+        }
+        
+        // レシピタイトルを生成
+        const randomIngredients = ingredients.sort(() => 0.5 - Math.random()).slice(0, 3).join('と');
+        recipeTitle.textContent = `${randomIngredients}の奇跡の煮込み`;
+
+        // 材料リストを生成
+        recipeIngredients.textContent = ingredients.join(', ') + '（加えて、あなたの想像力少々）';
+        
+        // 調理法をランダムに選択
+        const instructions = instructionsData[mood][Math.floor(Math.random() * instructionsData[mood].length)];
+        recipeInstructions.textContent = instructions;
+
+        // 調理時間をランダムに選択
+        const time = timeData[Math.floor(Math.random() * timeData.length)];
+        recipeTime.textContent = time;
+
+        recipeResult.style.display = 'block';
+    });
+</script>
+
+</body>
+</html>
