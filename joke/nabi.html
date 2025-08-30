@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>どこにも行けないナビゲーター</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f9fc;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #ff6347;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #d32f2f;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        #navigate-button {
+            background-color: #ff6347;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease-out;
+            position: relative;
+        }
+        .route-output {
+            margin-top: 30px;
+            background-color: #fff3e0;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            border-left: 5px solid #ff9800;
+        }
+        .route-output h2 {
+            color: #e65100;
+        }
+        .route-output p {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>どこにも行けないナビゲーター</h1>
+    <p>人生の迷いを、ここで体験してください。</p>
+
+    <div class="input-group">
+        <label for="current-location">現在の場所</label>
+        <input type="text" id="current-location" value="ヨーロッパ市、兵庫県、日本" disabled>
+    </div>
+
+    <div class="input-group">
+        <label for="destination">目的地を入力してください</label>
+        <input type="text" id="destination" placeholder="例: 東京タワー、エベレストの頂上">
+    </div>
+
+    <button id="navigate-button">迷いの旅に出発！</button>
+
+    <div id="route-result" class="route-output" style="display: none;">
+        <h2 id="route-title"></h2>
+        <p><strong>距離:</strong> <span id="route-distance"></span></p>
+        <p><strong>時間:</strong> <span id="route-time"></span></p>
+        <p><strong>道順:</strong> <span id="route-instructions"></span></p>
+    </div>
+</div>
+
+<script>
+    const navigateButton = document.getElementById('navigate-button');
+    const destinationInput = document.getElementById('destination');
+    const routeResult = document.getElementById('route-result');
+    const routeTitle = document.getElementById('route-title');
+    const routeDistance = document.getElementById('route-distance');
+    const routeTime = document.getElementById('route-time');
+    const routeInstructions = document.getElementById('route-instructions');
+
+    const routeData = [
+        {
+            title: '無限ループ',
+            instructions: 'ここから右に曲がり、次に左、そしてそのまま真っ直ぐ進んで、右に曲がります…あれ？やっぱり、最初から左でしたね。もう一度最初からやり直してください。',
+            distance: '約2光年',
+            time: '無限大'
+        },
+        {
+            title: '精神的迷路',
+            instructions: 'まず過去に戻り、別の交通手段を選んでください。それが無理なら、現在地で座り込み、心の声に従ってください（ただし、心の声も間違っているかもしれません）。',
+            distance: '無限大',
+            time: '精神的な距離は無限大'
+        },
+        {
+            title: '運命の道',
+            instructions: '進行方向の猫に今日の運勢を聞いてください。もし「最悪」と答えたら、Uターンして無限ループしてください。',
+            distance: '不明',
+            time: '猫の気分次第'
+        },
+        {
+            title: '哲学の旅',
+            instructions: 'この道を100メートル進んでください。その後、記憶を消して、もう一度この地点からやり直してください。',
+            distance: '100メートル（ただし、精神的な疲労は無限大）',
+            time: 'あなたの決断力次第'
+        },
+        {
+            title: '幻覚のルート',
+            instructions: 'このルートは存在しません。目的地はあなたの心の中にのみあります。道に迷うことを楽しんでください。',
+            distance: '非現実的',
+            time: '時間の概念を超越'
+        }
+    ];
+
+    navigateButton.addEventListener('click', () => {
+        const destination = destinationInput.value.trim();
+
+        if (destination === '') {
+            alert('目的地を入力してください！');
+            return;
+        }
+        
+        const randomRoute = routeData[Math.floor(Math.random() * routeData.length)];
+        
+        routeTitle.textContent = `${destination}への道：${randomRoute.title}`;
+        routeDistance.textContent = randomRoute.distance;
+        routeTime.textContent = randomRoute.time;
+        routeInstructions.textContent = randomRoute.instructions;
+
+        routeResult.style.display = 'block';
+    });
+
+    // ボタンがマウスに近づくと逃げる処理
+    navigateButton.addEventListener('mouseover', () => {
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        const buttonRect = navigateButton.getBoundingClientRect();
+
+        let newX, newY;
+        let maxAttempts = 50;
+
+        do {
+            newX = Math.random() * (viewportWidth - buttonRect.width);
+            newY = Math.random() * (viewportHeight - buttonRect.height);
+            maxAttempts--;
+        } while (
+            (Math.abs(newX - buttonRect.left) < 150 || Math.abs(newY - buttonRect.top) < 150) &&
+            maxAttempts > 0
+        );
+
+        navigateButton.style.position = 'fixed';
+        navigateButton.style.left = `${newX}px`;
+        navigateButton.style.top = `${newY}px`;
+    });
+</script>
+
+</body>
+</html>
