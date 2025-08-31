@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最高の褒め言葉ジェネレーター</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fffde7;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #ff9800;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #ef6c00;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        #generate-button {
+            background-color: #ff9800;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .praise-output {
+            margin-top: 30px;
+            background-color: #fff8e1;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            border-left: 5px solid #ffb300;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>最高の褒め言葉ジェネレーター</h1>
+    <p>あなたの入力から、的外れで、逆に面白い褒め言葉を生成します。</p>
+    <div class="input-group">
+        <label for="name">褒めたい相手の名前</label>
+        <input type="text" id="name" placeholder="例: 太郎">
+    </div>
+    <div class="input-group">
+        <label for="topic">褒めたいこと（例: 笑顔、仕事ぶり、ファッション）</label>
+        <input type="text" id="topic" placeholder="例: 笑顔">
+    </div>
+    <button id="generate-button">褒め言葉を生成！</button>
+
+    <div id="praise-result" class="praise-output" style="display: none;">
+        <h2>生成された褒め言葉</h2>
+        <p id="output-praise"></p>
+    </div>
+</div>
+
+<script>
+    const generateButton = document.getElementById('generate-button');
+    const nameInput = document.getElementById('name');
+    const topicInput = document.getElementById('topic');
+    const praiseResult = document.getElementById('praise-result');
+    const outputPraise = document.getElementById('output-praise');
+
+    const praiseTemplates = [
+        'あなたの{topic}は、まるで濡れた段ボール箱のようです。いや、最高にクールです！',
+        'あなたの手のひらからは、無限の宇宙が広がっていますね。',
+        'あなたの耳は、世界のすべての音を聴き分けられるほど素晴らしい。',
+        'あなたの{topic}は、私が昨日見た夢に出てきた最高の{topic}とそっくりです。',
+        'あなたは、私が次に何を食べたいかを正確に知っていますね。それがあなたの最大の魅力です。',
+        'あなたの{topic}は、物理法則を無視しているかのようです。'
+    ];
+
+    generateButton.addEventListener('click', () => {
+        const name = nameInput.value || 'あの人';
+        const topic = topicInput.value || '存在';
+
+        const template = praiseTemplates[Math.floor(Math.random() * praiseTemplates.length)];
+        const praise = `親愛なる${name}さん、` + template.replace(/{topic}/g, topic);
+        
+        outputPraise.textContent = praise;
+        praiseResult.style.display = 'block';
+    });
+</script>
+
+</body>
+</html>
