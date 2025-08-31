@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ブルースクリーンジェネレーター</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #0078d4;
+            margin-bottom: 10px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #005a9e;
+        }
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+        #generate-button {
+            background-color: #0078d4;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .bsod-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0078d4;
+            color: #fff;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            line-height: 1.5;
+            z-index: 9999;
+        }
+        .bsod-header {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        .bsod-message {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        .bsod-details {
+            font-size: 1.2em;
+            text-align: left;
+            margin: 0 auto;
+            max-width: 800px;
+            white-space: pre-wrap;
+        }
+        .bsod-footer {
+            margin-top: 30px;
+            font-size: 0.9em;
+        }
+        .bsod-progress {
+            margin-top: 20px;
+        }
+        .bsod-progress-bar {
+            width: 300px;
+            height: 5px;
+            background-color: #fff;
+            opacity: 0.5;
+            animation: progress 5s infinite;
+        }
+        @keyframes progress {
+            0% { transform: scaleX(0); }
+            100% { transform: scaleX(1); }
+        }
+        .qr-code {
+            margin-top: 20px;
+            width: 100px;
+            height: 100px;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>ブルースクリーンジェネレーター</h1>
+    <p>あなたのPCがクラッシュしたフリをします。友達を驚かせたり、ジョークに使ったりしてください。</p>
+    <div class="input-group">
+        <label for="stop-reason">停止理由</label>
+        <textarea id="stop-reason" rows="3" placeholder="例: PCが、あなたのジョークに耐えられませんでした。"></textarea>
+    </div>
+    <div class="input-group">
+        <label for="error-code">エラーコード (オプション)</label>
+        <input type="text" id="error-code" placeholder="例: 0xBAADF00D">
+    </div>
+    <div class="input-group">
+        <label for="qr-text">QRコード下のテキスト (オプション)</label>
+        <input type="text" id="qr-text" placeholder="例: このQRコードをスキャンすると、最高のジョークサイトに飛びます。">
+    </div>
+    <button id="generate-button">ブルースクリーンを生成！</button>
+</div>
+
+<div id="bsod-screen" class="bsod-screen">
+    <div class="bsod-header">:(</div>
+    <div class="bsod-message">問題が発生したため、PCを再起動する必要があります。<br>エラーコード: <span id="output-error-code"></span></div>
+    <div class="bsod-details">
+        <p id="output-stop-reason"></p>
+        <p>詳細については、オンラインで後で検索できます。問題が解決しない場合は、以下の情報を参照してください。</p>
+        <p>停止コード: <span id="output-stop-code"></span></p>
+    </div>
+    <div class="bsod-footer">
+        <div class="bsod-progress">
+            <p>0% 完了</p>
+            <div class="bsod-progress-bar"></div>
+        </div>
+        <p id="output-qr-text"></p>
+        <div id="qr-code" class="qr-code"></div>
+        <p>キーボードの`Esc`キー、または画面をタップして終了します。</p>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+    const generateButton = document.getElementById('generate-button');
+    const bsodScreen = document.getElementById('bsod-screen');
+    const stopReasonInput = document.getElementById('stop-reason');
+    const errorCodeInput = document.getElementById('error-code');
+    const qrTextInput = document.getElementById('qr-text');
+
+    const outputErrorCode = document.getElementById('output-error-code');
+    const outputStopReason = document.getElementById('output-stop-reason');
+    const outputQrText = document.getElementById('output-qr-text');
+    const outputStopCode = document.getElementById('output-stop-code');
+    const qrCodeDiv = document.getElementById('qr-code');
+
+    generateButton.addEventListener('click', () => {
+        const stopReason = stopReasonInput.value || 'PCが、あなたのジョークに耐えられませんでした。';
+        const errorCode = errorCodeInput.value || '0xDEADC0DE';
+        const qrText = qrTextInput.value || 'このQRコードをスキャンすると、最高のジョークサイトに飛びます。';
+        const stopCode = 'JOKE_WEBSITE_ERROR';
+
+        outputStopReason.textContent = stopReason;
+        outputErrorCode.textContent = errorCode;
+        outputQrText.textContent = qrText;
+        outputStopCode.textContent = stopCode;
+
+        bsodScreen.style.display = 'flex';
+
+        // QRコードを生成（このサイトのURLに）
+        qrCodeDiv.innerHTML = '';
+        new QRCode(qrCodeDiv, {
+            text: window.location.href,
+            width: 100,
+            height: 100,
+        });
+    });
+
+    // 画面クリックまたはEscキーで元に戻る
+    bsodScreen.addEventListener('click', () => {
+        bsodScreen.style.display = 'none';
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            bsodScreen.style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>
