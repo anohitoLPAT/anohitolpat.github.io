@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>究極の退職願メーカー</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fce4ec;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 650px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #ad1457;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #880e4f;
+        }
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        #generate-button {
+            background-color: #ad1457;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .resignation-output {
+            margin-top: 30px;
+            background-color: #f8bbd0;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            border-left: 5px solid #d81b60;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>究極の退職願メーカー</h1>
+    <p>あなたの入力から、絶対に受理されない退職願を生成します。</p>
+    <div class="input-group">
+        <label for="name">あなたの名前</label>
+        <input type="text" id="name" placeholder="例: 山田太郎">
+    </div>
+    <div class="input-group">
+        <label for="reason">退職理由</label>
+        <input type="text" id="reason" placeholder="例: 新しい仕事が見つかったため">
+    </div>
+    <div class="input-group">
+        <label for="message-to-boss">上司へのメッセージ</label>
+        <textarea id="message-to-boss" rows="3" placeholder="例: 大変お世話になりました。"></textarea>
+    </div>
+    <button id="generate-button">退職願を作成！</button>
+
+    <div id="resignation-result" class="resignation-output" style="display: none;">
+        <h2>退職願</h2>
+        <p>拝啓</p>
+        <p>私こと、<span id="output-name"></span>は、この度一身上の都合により、<br>
+        来るべき宇宙旅行の準備のため、貴社を退職したく、ここに願い出ます。</p>
+        <p>退職理由: <span id="output-reason"></span></p>
+        <p>新しい仕事: 宇宙船のパイロットになるため</p>
+        <p>上司へのメッセージ: <span id="output-message"></span></p>
+        <p>引き継ぎ事項: 私の魂をあなたに託します。私の存在そのものが引き継ぎ事項です。</p>
+        <p>貴社の益々の繁栄を、宇宙の彼方からお祈り申し上げます。</p>
+        <p>敬具</p>
+        <p><span id="output-date"></span></p>
+    </div>
+</div>
+
+<script>
+    const generateButton = document.getElementById('generate-button');
+    const nameInput = document.getElementById('name');
+    const reasonInput = document.getElementById('reason');
+    const messageInput = document.getElementById('message-to-boss');
+    const resignationResult = document.getElementById('resignation-result');
+    const outputName = document.getElementById('output-name');
+    const outputReason = document.getElementById('output-reason');
+    const outputMessage = document.getElementById('output-message');
+    const outputDate = document.getElementById('output-date');
+
+    generateButton.addEventListener('click', () => {
+        const name = nameInput.value || '名無し';
+        const reason = reasonInput.value || '転職のため';
+        const message = messageInput.value || '大変お世話になりました。';
+
+        outputName.textContent = name;
+        outputReason.textContent = reason;
+        outputMessage.textContent = message;
+        outputDate.textContent = new Date().toLocaleDateString('ja-JP', {year: 'numeric', month: 'long', day: 'numeric'});
+
+        resignationResult.style.display = 'block';
+    });
+</script>
+
+</body>
+</html>
