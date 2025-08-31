@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Embed Generator</title>
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #36393f;
+            color: #dcddde;
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+        }
+        .controls, .preview {
+            background-color: #2f3136;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .controls {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .preview {
+            flex: 1;
+        }
+        h2 {
+            margin-top: 0;
+            color: #fff;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            background-color: #40444b;
+            border: 1px solid #23272a;
+            color: #dcddde;
+            border-radius: 4px;
+        }
+        .embed {
+            background-color: #2f3136;
+            border-left: 4px solid #7289da;
+            padding: 10px;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .embed-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #fff;
+        }
+        .embed-description {
+            font-size: 0.9em;
+            color: #dcddde;
+        }
+        .embed-field-title {
+            font-weight: bold;
+            color: #fff;
+        }
+        .embed-field-value {
+            font-size: 0.9em;
+            color: #dcddde;
+        }
+        .embed-footer {
+            font-size: 0.8em;
+            color: #72767d;
+        }
+        .embed-image, .embed-thumbnail {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+        .embed-thumbnail {
+            max-width: 80px;
+            float: right;
+        }
+        .code-output {
+            background-color: #23272a;
+            padding: 10px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: monospace;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <h2>埋め込みメッセージ設定</h2>
+        <label for="embedColor">色 (HEX)</label>
+        <input type="color" id="embedColor" value="#7289da" oninput="updatePreview()">
+
+        <label for="embedTitle">タイトル</label>
+        <input type="text" id="embedTitle" oninput="updatePreview()">
+
+        <label for="embedDescription">説明</label>
+        <textarea id="embedDescription" oninput="updatePreview()"></textarea>
+
+        <label for="embedFields">フィールド (タイトル|内容|インライン, 改行で複数)</label>
+        <textarea id="embedFields" oninput="updatePreview()" rows="5" placeholder="例: フィールド1|内容1|true&#10;フィールド2|内容2|false"></textarea>
+
+        <label for="embedImage">画像URL</label>
+        <input type="url" id="embedImage" oninput="updatePreview()">
+
+        <label for="embedThumbnail">サムネイルURL</label>
+        <input type="url" id="embedThumbnail" oninput="updatePreview()">
+        
+        <label for="embedFooter">フッターテキスト</label>
+        <input type="text" id="embedFooter" oninput="updatePreview()">
+        
+        <label for="embedFooterIcon">フッターアイコンURL</label>
+        <input type="url" id="embedFooterIcon" oninput="updatePreview()">
+
+        <label for="codeOutput">生成コード</label>
+        <pre class="code-output" id="codeOutput"></pre>
+    </div>
+
+    <div class="preview">
+        <h2>プレビュー</h2>
+        <div class="embed-container">
+            <div class="embed">
+                <div id="previewThumbnail"></div>
+                <div id="previewTitle" class="embed-title"></div>
+                <div id="previewDescription" class="embed-description"></div>
+                <div id="previewFields"></div>
+                <div id="previewImage"></div>
+                <div id="previewFooter" class="embed-footer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updatePreview() {
+            const color = document.getElementById('embedColor').value;
+            const title = document.getElementById('embedTitle').value;
+            const description = document.getElementById('embedDescription').value;
+            const fieldsText = document.getElementById('embedFields').value;
+            const image = document.getElementById('embedImage').value;
+            const thumbnail = document.getElementById('embedThumbnail').value;
+            const footer = document.getElementById('embedFooter').value;
+            const footerIcon = document.getElementById('embedFooterIcon').value;
+
+            const previewEmbed = document.querySelector('.embed');
+            previewEmbed.style.borderLeftColor = color;
+            document.getElementById('previewTitle').textContent = title;
+            document.getElementById('previewDescription').textContent = description;
+            
+            const previewFields = document.getElementById('previewFields');
+            previewFields.innerHTML = '';
+            const fields = fieldsText.split('\n').filter(Boolean);
+            let fieldsJS = '';
+
+            fields.forEach(fieldStr => {
+                const parts = fieldStr.split('|').map(p => p.trim());
+                if (parts.length >= 2) {
+                    const fieldTitle = parts[0];
+                    const fieldValue = parts[1];
+                    const inline = parts[2] ? parts[2].toLowerCase() === 'true' : false;
+
+                    const fieldDiv = document.createElement('div');
+                    fieldDiv.innerHTML = `<span class="embed-field-title">${fieldTitle}</span><br><span class="embed-field-value">${fieldValue}</span>`;
+                    fieldDiv.style.display = inline ? 'inline-block' : 'block';
+                    fieldDiv.style.width = inline ? '48%' : '100%';
+                    fieldDiv.style.verticalAlign = 'top';
+                    fieldDiv.style.marginBottom = '5px';
+                    previewFields.appendChild(fieldDiv);
+                    
+                    fieldsJS += `{ name: '${fieldTitle.replace(/'/g, "\\'")}', value: '${fieldValue.replace(/'/g, "\\'")}', inline: ${inline} },\n`;
+                }
+            });
+
+            const previewImage = document.getElementById('previewImage');
+            previewImage.innerHTML = image ? `<img src="${image}" alt="Embed Image" class="embed-image">` : '';
+
+            const previewThumbnail = document.getElementById('previewThumbnail');
+            previewThumbnail.innerHTML = thumbnail ? `<img src="${thumbnail}" alt="Embed Thumbnail" class="embed-thumbnail">` : '';
+
+            const previewFooter = document.getElementById('previewFooter');
+            let footerHtml = footer;
+            if (footerIcon) {
+                footerHtml = `<img src="${footerIcon}" style="width: 20px; height: 20px; vertical-align: middle; border-radius: 50%; margin-right: 5px;">${footer}`;
+            }
+            previewFooter.innerHTML = footerHtml;
+
+            // Generate JS code
+            let jsCode = `const { EmbedBuilder } = require('discord.js');\n\nconst exampleEmbed = new EmbedBuilder()\n`;
+            if (color) jsCode += `.setColor('${color}')\n`;
+            if (title) jsCode += `.setTitle('${title.replace(/'/g, "\\'")}')\n`;
+            if (description) jsCode += `.setDescription('${description.replace(/'/g, "\\'")}')\n`;
+            if (fieldsJS) jsCode += `.addFields(${fieldsJS.trim().slice(0, -1)}\n)\n`;
+            if (image) jsCode += `.setImage('${image}')\n`;
+            if (thumbnail) jsCode += `.setThumbnail('${thumbnail}')\n`;
+            if (footer || footerIcon) {
+                const footerObj = {};
+                if (footer) footerObj.text = `'${footer.replace(/'/g, "\\'")}'`;
+                if (footerIcon) footerObj.iconURL = `'${footerIcon}'`;
+                jsCode += `.setFooter(${JSON.stringify(footerObj).replace(/"/g, "'").replace(/'(text|iconURL)':/g, '$1:')})\n`;
+            }
+            jsCode += `;\n\n// Send the embed\n// channel.send({ embeds: [exampleEmbed] });`;
+            
+            document.getElementById('codeOutput').textContent = jsCode;
+        }
+
+        window.onload = updatePreview;
+    </script>
+</body>
+</html>
