@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>今日の献立AI</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7fa;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #00796b;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #004d40;
+        }
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        #generate-button {
+            background-color: #00796b;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .menu-output {
+            margin-top: 30px;
+            background-color: #f1f8e9;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            border-left: 5px solid #8bc34a;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>今日の献立AI</h1>
+    <p>気分や天候に応じて、AIが奇妙な献立を提案します。</p>
+    <div class="input-group">
+        <label for="mood">今日の気分は？</label>
+        <select id="mood">
+            <option value="happy">元気</option>
+            <option value="sad">憂鬱</option>
+            <option value="adventurous">冒険したい</option>
+            <option value="tired">疲れている</option>
+        </select>
+    </div>
+    <div class="input-group">
+        <label for="weather">今日の天気は？</label>
+        <select id="weather">
+            <option value="sunny">晴れ</option>
+            <option value="rainy">雨</option>
+            <option value="snowy">雪</option>
+            <option value="stormy">嵐</option>
+        </select>
+    </div>
+    <button id="generate-button">献立を決定！</button>
+
+    <div id="menu-result" class="menu-output" style="display: none;">
+        <h2>今日の献立：</h2>
+        <p id="menu-text"></p>
+    </div>
+</div>
+
+<script>
+    const generateButton = document.getElementById('generate-button');
+    const moodSelect = document.getElementById('mood');
+    const weatherSelect = document.getElementById('weather');
+    const menuResult = document.getElementById('menu-result');
+    const menuText = document.getElementById('menu-text');
+
+    const menus = {
+        happy: {
+            sunny: '熱々の激辛ラーメン（夏の暑い日にピッタリ！）',
+            rainy: '雨水を集めたスープに、カエルをトッピングしたサラダ',
+            snowy: 'キンキンに冷えたかき氷と冷製パスタ',
+            stormy: '雷をテーマにした、真っ黒なパンケーキ'
+        },
+        sad: {
+            sunny: '涙で塩味をつけた、冷たいスープ',
+            rainy: '雨の音を聞きながら食べる、苦いチョコレートとレモン',
+            snowy: '雪のように冷たい、凍ったトマトとキュウリ',
+            stormy: '嵐の日に一人で食べる、冷たいおにぎり'
+        },
+        adventurous: {
+            sunny: 'アリの卵と草のサラダ、太陽光で調理',
+            rainy: '泥で固めた団子と、雨水で淹れたお茶',
+            snowy: '氷でできた鍋で煮込む、氷のスープ',
+            stormy: '雷が鳴った瞬間に火から下ろす、不思議な煮込み料理'
+        },
+        tired: {
+            sunny: '何も作らず、日光を浴びて栄養補給する',
+            rainy: '布団の中で食べる、乾いたパン',
+            snowy: '寒すぎて食べられない、凍ったリンゴ',
+            stormy: '雷の音で目覚めて、何も食べずに再び寝る'
+        }
+    };
+
+    generateButton.addEventListener('click', () => {
+        const mood = moodSelect.value;
+        const weather = weatherSelect.value;
+        const selectedMenu = menus[mood][weather];
+
+        menuText.textContent = selectedMenu;
+        menuResult.style.display = 'block';
+    });
+</script>
+
+</body>
+</html>
