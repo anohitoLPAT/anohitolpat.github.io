@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>架空の国ジェネレーター</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        #countryName {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        #flagDisplay {
+            width: 100%;
+            height: 250px;
+            border: 2px solid #333;
+            background-color: #fafafa;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #138496;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>架空の国ジェネレーター</h1>
+        <div id="countryName"></div>
+        <div id="flagDisplay">
+            <svg id="flagSvg" width="100%" height="100%" viewBox="0 0 300 150"></svg>
+        </div>
+        <button onclick="generateCountry()">新しい国を生成</button>
+    </div>
+
+    <script>
+        const syllables = [
+            "ア", "イ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ", "サ", "シ",
+            "セ", "ソ", "タ", "チ", "ツ", "テ", "ト", "ナ", "ニ", "ヌ", "ネ",
+            "ノ", "ハ", "ヒ", "フ", "ヘ", "ホ", "マ", "ミ", "ム", "メ", "モ",
+            "ヤ", "ユ", "ヨ", "ラ", "リ", "ル", "レ", "ロ", "ワ", "ン", "ド",
+            "ル", "リア", "ニア", "ン", "ティ", "トリア"
+        ];
+        
+        const colors = ["#d9534f", "#f0ad4e", "#5cb85c", "#0275d8", "#495057", "#fff", "#000"];
+        const shapes = ["circle", "triangle", "rect", "star"];
+
+        function getRandomElement(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function generateCountryName() {
+            let name = "";
+            const length = Math.floor(Math.random() * 3) + 2; // 2～4音節
+            for (let i = 0; i < length; i++) {
+                name += getRandomElement(syllables);
+            }
+            return name.trim();
+        }
+
+        function generateFlag() {
+            const svg = document.getElementById('flagSvg');
+            svg.innerHTML = '';
+            
+            // 背景
+            const bgColor = getRandomElement(colors);
+            const bgRect = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+            bgRect.setAttribute('width', '100%');
+            bgRect.setAttribute('height', '100%');
+            bgRect.setAttribute('fill', bgColor);
+            svg.appendChild(bgRect);
+
+            // シンボル
+            const symbolColor = getRandomElement(colors.filter(c => c !== bgColor));
+            const symbolShape = getRandomElement(shapes);
+            
+            let symbol;
+            switch(symbolShape) {
+                case "circle":
+                    symbol = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+                    symbol.setAttribute('cx', '150');
+                    symbol.setAttribute('cy', '75');
+                    symbol.setAttribute('r', '50');
+                    break;
+                case "triangle":
+                    symbol = document.createElementNS("http://www.w3.org/2000/svg", 'polygon');
+                    symbol.setAttribute('points', '150,25 250,125 50,125');
+                    break;
+                case "rect":
+                    symbol = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+                    symbol.setAttribute('x', '100');
+                    symbol.setAttribute('y', '25');
+                    symbol.setAttribute('width', '100');
+                    symbol.setAttribute('height', '100');
+                    break;
+                case "star":
+                    symbol = document.createElementNS("http://www.w3.org/2000/svg", 'polygon');
+                    symbol.setAttribute('points', '150,10 170,60 225,65 180,100 200,150 150,120 100,150 120,100 75,65 130,60');
+                    break;
+            }
+            if (symbol) {
+                symbol.setAttribute('fill', symbolColor);
+                svg.appendChild(symbol);
+            }
+        }
+
+        function generateCountry() {
+            document.getElementById('countryName').textContent = generateCountryName();
+            generateFlag();
+        }
+
+        // ページ読み込み時に最初の国を生成
+        window.onload = generateCountry;
+    </script>
+</body>
+</html>
