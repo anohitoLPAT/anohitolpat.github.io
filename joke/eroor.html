@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>エラー画面ジェネレーター</title>
+    <style>
+        /* CSS */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+        .error-code {
+            font-size: 8rem;
+            font-weight: bold;
+            color: #d9534f;
+            margin-bottom: 0;
+        }
+        .error-message {
+            font-size: 2rem;
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .error-details {
+            color: #666;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            white-space: pre-wrap; /* 改行を有効にする */
+        }
+        .controls {
+            width: 90%;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .controls input, .controls textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        .controls textarea {
+            resize: vertical;
+            height: 100px;
+        }
+        .generate-btn {
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s;
+        }
+        .generate-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <h2>エラー画面設定</h2>
+        <input type="text" id="errorCodeInput" placeholder="エラーコード (例: 404)">
+        <input type="text" id="errorMessageInput" placeholder="エラーメッセージ (例: Page Not Found)">
+        <textarea id="errorDetailsInput" placeholder="詳細な説明をここに入力してください。"></textarea>
+        <button class="generate-btn" onclick="generateErrorScreen()">生成</button>
+    </div>
+
+    <div class="container" id="errorScreen">
+        <h1 class="error-code" id="displayCode"></h1>
+        <p class="error-message" id="displayMessage"></p>
+        <p class="error-details" id="displayDetails"></p>
+    </div>
+
+    <script>
+        // JavaScript
+        function generateErrorScreen() {
+            const codeInput = document.getElementById('errorCodeInput').value;
+            const messageInput = document.getElementById('errorMessageInput').value;
+            const detailsInput = document.getElementById('errorDetailsInput').value;
+
+            const displayCode = document.getElementById('displayCode');
+            const displayMessage = document.getElementById('displayMessage');
+            const displayDetails = document.getElementById('displayDetails');
+
+            // 入力がなければデフォルト値を設定
+            displayCode.textContent = codeInput || '500';
+            displayMessage.textContent = messageInput || 'Internal Server Error';
+            displayDetails.textContent = detailsInput || 'サーバー内部で予期せぬエラーが発生しました。しばらくしてから再度お試しください。';
+        }
+
+        // ページ読み込み時に一度実行
+        window.onload = generateErrorScreen;
+    </script>
+
+</body>
+</html>
