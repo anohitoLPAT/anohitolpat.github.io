@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRコードジェネレーター</title>
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .container {
+            width: 90%;
+            max-width: 450px;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        #qrcode {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fafafa;
+            border: 1px dashed #ccc;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        #downloadBtn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        #downloadBtn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>QRコードジェネレーター</h1>
+        <textarea id="textInput" placeholder="URLやテキストを入力してください" oninput="generateQR()"></textarea>
+        <div id="qrcode"></div>
+        <button id="downloadBtn" onclick="downloadQR()" disabled>ダウンロード</button>
+    </div>
+
+    <script>
+        let qrcodeInstance;
+
+        function generateQR() {
+            const text = document.getElementById('textInput').value;
+            const qrContainer = document.getElementById('qrcode');
+            const downloadBtn = document.getElementById('downloadBtn');
+
+            // 既存のQRコードをクリア
+            qrContainer.innerHTML = '';
+            
+            if (text.trim() === '') {
+                qrContainer.innerHTML = 'QRコードが表示されます';
+                downloadBtn.disabled = true;
+                return;
+            }
+
+            if (qrcodeInstance) {
+                qrcodeInstance.clear();
+            }
+
+            // QRコードを生成
+            qrcodeInstance = new QRCode(qrContainer, {
+                text: text,
+                width: 256,
+                height: 256,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+            downloadBtn.disabled = false;
+        }
+
+        function downloadQR() {
+            const qrCanvas = document.querySelector('#qrcode canvas');
+            if (qrCanvas) {
+                const url = qrCanvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'qrcode.png';
+                link.click();
+            }
+        }
+
+        window.onload = generateQR;
+    </script>
+</body>
+</html>
