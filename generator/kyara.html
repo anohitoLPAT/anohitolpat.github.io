@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>キャラクタープロフィールジェネレーター</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        .profile {
+            border: 2px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            background-color: #fafafa;
+            text-align: left;
+        }
+        .profile h2 {
+            margin-top: 0;
+            color: #007bff;
+        }
+        .profile p {
+            margin: 10px 0;
+            font-size: 1.1em;
+            color: #555;
+        }
+        .profile strong {
+            color: #333;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>キャラクタープロフィールジェネレーター</h1>
+        <div class="profile" id="characterProfile">
+            </div>
+        <button onclick="generateCharacter()">新しいキャラクターを生成</button>
+    </div>
+
+    <script>
+        const names = [
+            "アリア", "カイト", "リナ", "レオ", "ミカ", "ソラ", "ハルキ", "ユキ",
+            "ゼファー", "セレナ", "カイアス", "リリアナ"
+        ];
+        const occupations = [
+            "魔法使い", "宇宙探検家", "パン屋", "古代遺跡ハンター", "秘密の諜報員",
+            "吟遊詩人", "サイバーパンクなハッカー", "ドラゴン使い", "錬金術師",
+            "農家"
+        ];
+        const traits = [
+            "いつも眠そうにしている", "片目に眼帯をしている", "特定の食べ物を嫌う",
+            "不思議なタトゥーがある", "動物と話せる", "極度の方向音痴",
+            "常に本を読んでいる", "無口で感情を表に出さない", "運が異常に良い"
+        ];
+        const backgrounds = [
+            "孤児院で育ち、独自のスキルを磨いた。",
+            "過去に秘密の任務を遂行し、記憶の一部を失った。",
+            "裕福な家庭の出身だが、冒険を求めて家を出た。",
+            "故郷が何者かに滅ぼされ、復讐を誓っている。",
+            "ある賢者に弟子入りし、厳しい修行を積んだ。",
+            "呪われた森で迷子になり、奇妙な力に目覚めた。"
+        ];
+
+        function getRandomElement(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function generateCharacter() {
+            const randomName = getRandomElement(names);
+            const randomOccupation = getRandomElement(occupations);
+            const randomTrait = getRandomElement(traits);
+            const randomBackground = getRandomElement(backgrounds);
+
+            const profileDiv = document.getElementById('characterProfile');
+            profileDiv.innerHTML = `
+                <h2>${randomName}</h2>
+                <p><strong>職業:</strong> ${randomOccupation}</p>
+                <p><strong>特徴:</strong> ${randomTrait}</p>
+                <p><strong>背景:</strong> ${randomBackground}</p>
+            `;
+        }
+        
+        // ページ読み込み時に最初のキャラクターを生成
+        window.onload = generateCharacter;
+    </script>
+</body>
+</html>
