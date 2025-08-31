@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ランダムワードジェネレーター</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        input[type="number"] {
+            width: 80px;
+            padding: 10px;
+            font-size: 1.2rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            font-size: 2.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            min-height: 50px;
+            margin-top: 20px;
+            color: #333;
+            border: 2px dashed #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #fafafa;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>ランダムワードジェネレーター</h1>
+        <div class="controls">
+            <label for="wordLength">文字数:</label>
+            <input type="number" id="wordLength" value="8" min="1" max="50">
+            <button onclick="generateRandomWord()">生成</button>
+        </div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function generateRandomWord() {
+            const length = document.getElementById('wordLength').value;
+            const resultDiv = document.getElementById('result');
+            const characters = 'abcdefghijklmnopqrstuvwxyz';
+            let randomWord = '';
+            
+            if (length < 1 || length > 50) {
+                resultDiv.textContent = '文字数は1から50の間で指定してください。';
+                return;
+            }
+
+            for (let i = 0; i < length; i++) {
+                randomWord += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            
+            resultDiv.textContent = randomWord;
+        }
+
+        // ページ読み込み時に一度生成
+        window.onload = generateRandomWord;
+    </script>
+
+</body>
+</html>
