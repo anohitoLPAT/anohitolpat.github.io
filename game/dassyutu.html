@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>謎の部屋からの脱出</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            text-align: center;
+        }
+        .room {
+            width: 800px;
+            height: 600px;
+            background-color: #555;
+            border: 10px solid #222;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+        }
+        .message {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1.2em;
+            z-index: 10;
+        }
+
+        /* クリック可能なアイテム */
+        .item {
+            position: absolute;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .item:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+
+        /* アイテムの具体的な配置とデザイン */
+        #picture {
+            width: 150px;
+            height: 150px;
+            background-color: #8b4513; /* 茶色 */
+            border: 5px solid #a0522d;
+            top: 50px;
+            left: 100px;
+            line-height: 150px;
+            font-size: 0.8em;
+        }
+        #desk {
+            width: 300px;
+            height: 200px;
+            background-color: #46301d; /* 濃い茶色 */
+            bottom: 50px;
+            left: 50px;
+            line-height: 200px;
+            font-size: 0.8em;
+        }
+        #door {
+            width: 150px;
+            height: 350px;
+            background-color: #800000; /* 濃い赤 */
+            top: 100px;
+            right: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-left: 5px solid #333;
+            font-size: 1.5em;
+        }
+
+        /* パスワード入力フィールド */
+        #password-input {
+            margin-top: 10px;
+            padding: 5px;
+            width: 100px;
+            text-align: center;
+            font-size: 1em;
+        }
+        #submit-button {
+            margin-top: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+        }
+
+        /* ゲームクリア画面 */
+        .clear-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 255, 0, 0.9);
+            color: black;
+            font-size: 4em;
+            display: none; /* 初期は非表示 */
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="room" id="game-room">
+        <div class="message" id="game-message">
+            謎の部屋に閉じ込められた。どこかに出口があるはずだ...
+        </div>
+
+        <div class="item" id="picture">額縁</div>
+        <div class="item" id="desk">古い机</div>
+
+        <div id="door">
+            扉<br>
+            <input type="text" id="password-input" placeholder="パスワード">
+            <button id="submit-button">開ける</button>
+        </div>
+    </div>
+
+    <div class="clear-screen" id="clear-screen">
+        脱出成功！
+    </div>
+
+    <script>
+        const MESSAGE = document.getElementById('game-message');
+        const DOOR = document.getElementById('door');
+        const PASSWORD_INPUT = document.getElementById('password-input');
+        const SUBMIT_BUTTON = document.getElementById('submit-button');
+        const CLEAR_SCREEN = document.getElementById('clear-screen');
+
+        const HINT1 = "額縁を裏返すと...『14』";
+        const HINT2 = "机の引き出しの奥に...『92』";
+        const CORRECT_PASSWORD = "1492"; // ヒントを組み合わせたパスワード
+
+        // --- イベントリスナーの設定 ---
+
+        // 額縁をクリックした時の処理
+        document.getElementById('picture').addEventListener('click', () => {
+            MESSAGE.textContent = HINT1;
+        });
+
+        // 机をクリックした時の処理
+        document.getElementById('desk').addEventListener('click', () => {
+            MESSAGE.textContent = HINT2;
+        });
+
+        // 扉のボタンを押した時の処理
+        SUBMIT_BUTTON.addEventListener('click', () => {
+            const enteredPassword = PASSWORD_INPUT.value;
+
+            if (enteredPassword === CORRECT_PASSWORD) {
+                // 正解の場合
+                MESSAGE.textContent = "鍵が開いた！";
+                setTimeout(() => {
+                    // 0.5秒後にクリア画面を表示
+                    showClearScreen();
+                }, 500);
+            } else {
+                // 不正解の場合
+                MESSAGE.textContent = "カチッ...何も起こらない。パスワードが違うようだ。";
+                PASSWORD_INPUT.value = ""; // 入力欄をクリア
+            }
+        });
+        
+        // --- ゲームの機能関数 ---
+        
+        function showClearScreen() {
+            // クリア画面を表示し、他の要素を非表示にする
+            CLEAR_SCREEN.style.display = 'flex'; 
+            DOOR.style.display = 'none';
+            MESSAGE.style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
