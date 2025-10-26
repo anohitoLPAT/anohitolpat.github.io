@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>シンプルタイピングゲーム</title>
+    <title>ビビッドアーミー タイピングゲーム</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
+            background-color: #e6f7ff; /* ビビアミの空の色をイメージ */
+            color: #1a1a1a;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -18,79 +18,92 @@
             text-align: center;
         }
         .container {
-            background: #fff;
+            background: #ffffff;
             padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            max-width: 650px;
             width: 90%;
+            border: 3px solid #ff4500; /* 派手な枠線 */
         }
         h1 {
-            color: #007bff;
+            color: #ff4500; /* ビビッドな赤 */
             margin-bottom: 20px;
+            font-size: 2em;
         }
         #word-display {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            min-height: 1.2em; /* 文字が表示されないときも高さを確保 */
+            font-size: 2.8em;
+            margin-bottom: 30px;
+            min-height: 1.5em; 
+            font-weight: bold;
+            color: #007bff;
         }
         #typed-input {
             width: 80%;
-            padding: 10px;
-            font-size: 1.5em;
-            border: 2px solid #ccc;
-            border-radius: 5px;
+            padding: 12px;
+            font-size: 1.6em;
+            border: 3px solid #007bff;
+            border-radius: 8px;
             text-align: center;
+            box-sizing: border-box;
         }
         #start-button {
-            padding: 15px 30px;
-            font-size: 1.2em;
-            background-color: #28a745;
+            padding: 15px 35px;
+            font-size: 1.3em;
+            background-color: #ff4500;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 25px;
             transition: background-color 0.3s;
+            font-weight: bold;
         }
         #start-button:hover {
-            background-color: #218838;
+            background-color: #cc3700;
         }
         #score, #timer {
-            font-size: 1.3em;
+            font-size: 1.4em;
             margin: 10px 0;
             font-weight: bold;
         }
         .result {
             margin-top: 20px;
-            font-size: 1.5em;
-            color: #dc3545;
+            font-size: 1.8em;
+            color: #ff4500;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>シンプルタイピングゲーム</h1>
+        <h1>ビビッドアーミー タイピング訓練！ 💥</h1>
         
         <div id="timer">残り時間: 60秒</div>
         <div id="score">スコア: 0</div>
 
         <div id="word-display">スタートボタンを押してください</div>
 
-        <input type="text" id="typed-input" placeholder="ここに文字を入力" autofocus disabled>
+        <input type="text" id="typed-input" placeholder="入力開始！" autofocus disabled>
         
-        <button id="start-button">ゲームスタート</button>
+        <button id="start-button">出撃開始！</button>
 
         <div class="result" id="game-result"></div>
     </div>
 
     <script>
+        // ビビッドアーミー関連の単語とローマ字表記のリスト
+        // (注意: ユーザーの入力はローマ字またはひらがなで行うため、ひらがな/ローマ字の両方を記述しています)
         const words = [
-            "apple", "banana", "cat", "dog", "elephant", "flower", "garden", 
-            "happy", "internet", "japan", "keyboard", "lemon", "mountain", 
-            "nature", "ocean", "penguin", "queen", "robot", "sunshine", 
-            "tiger", "umbrella", "victory", "window", "xenon", "yellow", "zebra"
+            "vividarmy", "bibiam", "biviami", "eiyuu", "kichi", 
+            "rikugun", "kaigun", "kuugun", "hamaya", "heirei","4137","anohito", 
+            "gassai", "goudei", "gouyaku", "taikyuu", "shouryuu",
+            "shusai", "tokuten", "kousui", "koutei", "heki", 
+            "gunyari", "shibou", "tanku", "sensuikan", "kyuujou",
+            "zerosen", "taimen", "kousa", "kouryuu", "gunkan", 
+            "sentouki", "kairo", "kyouka", "kouritsu", "yuukou",
+            "choujaku", "shien", "houhei"
         ];
         
         const wordDisplay = document.getElementById('word-display');
@@ -110,7 +123,7 @@
         // 新しい単語を表示する
         function displayNewWord() {
             // words配列からランダムに単語を選ぶ
-            const randomIndex = Math.floor(Math.random() * words.length);
+            const randomIndex = Math.floor(Math-round(Math.random() * words.length));
             currentWord = words[randomIndex];
             wordDisplay.textContent = currentWord;
             typedInput.value = ''; // 入力欄をクリア
@@ -147,9 +160,9 @@
         // ゲームを終了する
         function endGame() {
             typedInput.disabled = true;
-            wordDisplay.textContent = "時間切れ！";
-            gameResult.textContent = `最終スコア: ${score}点！`;
-            startButton.textContent = 'もう一度プレイ';
+            wordDisplay.textContent = "作戦終了！";
+            gameResult.textContent = `最終スコア: ${score}点！ お疲れ様でした！`;
+            startButton.textContent = '再出撃！';
             startButton.style.display = 'block'; // スタートボタンを再表示
         }
 
@@ -160,8 +173,8 @@
 
         // 入力欄に文字が入力されたとき
         typedInput.addEventListener('input', () => {
-            const typedText = typedInput.value;
-
+            const typedText = typedInput.value.toLowerCase(); // 大文字小文字を区別しない
+            
             // 入力された文字が表示されている単語と一致するかチェック
             if (typedText === currentWord) {
                 score++;
@@ -170,8 +183,8 @@
             }
         });
         
-        // 初期状態として、最初に一度だけ単語を表示
-        wordDisplay.textContent = 'ゲームスタート準備完了！';
+        // 初期状態として、最初に一度だけメッセージを表示
+        wordDisplay.textContent = 'ビビッドアーミー用語をローマ字で入力！';
 
     </script>
 
