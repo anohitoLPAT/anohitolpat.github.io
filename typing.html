@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シンプルタイピングゲーム</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            text-align: center;
+        }
+        .container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+        }
+        h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        #word-display {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            min-height: 1.2em; /* 文字が表示されないときも高さを確保 */
+        }
+        #typed-input {
+            width: 80%;
+            padding: 10px;
+            font-size: 1.5em;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+        #start-button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        #start-button:hover {
+            background-color: #218838;
+        }
+        #score, #timer {
+            font-size: 1.3em;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>シンプルタイピングゲーム</h1>
+        
+        <div id="timer">残り時間: 60秒</div>
+        <div id="score">スコア: 0</div>
+
+        <div id="word-display">スタートボタンを押してください</div>
+
+        <input type="text" id="typed-input" placeholder="ここに文字を入力" autofocus disabled>
+        
+        <button id="start-button">ゲームスタート</button>
+
+        <div class="result" id="game-result"></div>
+    </div>
+
+    <script>
+        const words = [
+            "apple", "banana", "cat", "dog", "elephant", "flower", "garden", 
+            "happy", "internet", "japan", "keyboard", "lemon", "mountain", 
+            "nature", "ocean", "penguin", "queen", "robot", "sunshine", 
+            "tiger", "umbrella", "victory", "window", "xenon", "yellow", "zebra"
+        ];
+        
+        const wordDisplay = document.getElementById('word-display');
+        const typedInput = document.getElementById('typed-input');
+        const startButton = document.getElementById('start-button');
+        const scoreDisplay = document.getElementById('score');
+        const timerDisplay = document.getElementById('timer');
+        const gameResult = document.getElementById('game-result');
+
+        let currentWord = '';
+        let score = 0;
+        let timeLeft = 60; // 60秒の制限時間
+        let timerInterval;
+
+        // --- ゲームの状態管理関数 ---
+
+        // 新しい単語を表示する
+        function displayNewWord() {
+            // words配列からランダムに単語を選ぶ
+            const randomIndex = Math.floor(Math.random() * words.length);
+            currentWord = words[randomIndex];
+            wordDisplay.textContent = currentWord;
+            typedInput.value = ''; // 入力欄をクリア
+            typedInput.focus();
+        }
+
+        // ゲームをスタートする
+        function startGame() {
+            score = 0;
+            timeLeft = 60;
+            scoreDisplay.textContent = `スコア: ${score}`;
+            gameResult.textContent = '';
+            
+            typedInput.disabled = false;
+            startButton.style.display = 'none'; // スタートボタンを隠す
+            
+            displayNewWord(); // 最初の単語を表示
+            startTimer(); // タイマーを開始
+        }
+
+        // タイマーを開始する
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = `残り時間: ${timeLeft}秒`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    endGame();
+                }
+            }, 1000); // 1秒ごとに実行
+        }
+
+        // ゲームを終了する
+        function endGame() {
+            typedInput.disabled = true;
+            wordDisplay.textContent = "時間切れ！";
+            gameResult.textContent = `最終スコア: ${score}点！`;
+            startButton.textContent = 'もう一度プレイ';
+            startButton.style.display = 'block'; // スタートボタンを再表示
+        }
+
+        // --- イベントリスナー ---
+
+        // スタートボタンが押されたとき
+        startButton.addEventListener('click', startGame);
+
+        // 入力欄に文字が入力されたとき
+        typedInput.addEventListener('input', () => {
+            const typedText = typedInput.value;
+
+            // 入力された文字が表示されている単語と一致するかチェック
+            if (typedText === currentWord) {
+                score++;
+                scoreDisplay.textContent = `スコア: ${score}`;
+                displayNewWord(); // 次の単語を表示
+            }
+        });
+        
+        // 初期状態として、最初に一度だけ単語を表示
+        wordDisplay.textContent = 'ゲームスタート準備完了！';
+
+    </script>
+
+</body>
+</html>
