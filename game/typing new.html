@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本語タイピングゲーム</title>
+    <style>
+        body {
+            font-family: 'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            text-align: center;
+        }
+        .container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            max-width: 700px;
+            width: 90%;
+            border: 1px solid #ddd;
+        }
+        h1 {
+            color: #4682b4;
+            margin-bottom: 25px;
+            font-size: 2.2em;
+        }
+        #word-display {
+            font-size: 3em;
+            font-weight: bold;
+            color: #000080;
+            margin-bottom: 10px;
+            min-height: 1.2em;
+        }
+        #romaji-hint {
+            font-size: 1.5em;
+            color: #888;
+            margin-bottom: 30px;
+            min-height: 1.2em;
+        }
+        #typed-input {
+            width: 80%;
+            padding: 15px;
+            font-size: 1.8em;
+            border: 3px solid #4682b4;
+            border-radius: 8px;
+            text-align: center;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        #typed-input:focus {
+            outline: none;
+            border-color: #00bfff;
+        }
+        #start-button {
+            padding: 15px 40px;
+            font-size: 1.3em;
+            background-color: #3cb371;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+        #start-button:hover {
+            background-color: #2e8b57;
+        }
+        #score, #timer {
+            font-size: 1.4em;
+            margin: 10px 0;
+            font-weight: bold;
+            color: #555;
+        }
+        .result {
+            margin-top: 25px;
+            font-size: 1.8em;
+            color: #ff4500;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>日本語タイピング練習</h1>
+        
+        <div id="timer">残り時間: 60秒</div>
+        <div id="score">正解数: 0</div>
+
+        <div id="word-display">スタートボタンを押してください</div>
+
+        <div id="romaji-hint"></div>
+
+        <input type="text" id="typed-input" placeholder="ローマ字で入力開始" autofocus disabled>
+        
+        <button id="start-button">ゲームスタート</button>
+
+        <div class="result" id="game-result"></div>
+    </div>
+
+    <script>
+        // 日本語とローマ字のペアリスト
+        // (キーが日本語、値が対応するローマ字表記)
+        const wordPairs = {
+            "きょうと": "kyouto",
+            "とうきょう": "toukyou",
+            "さくら": "sakura",
+            "にほんご": "nihongo",
+            "たいぴんぐ": "taipingu",
+            "がっこう": "gakkou",
+            "としょかん": "tosyokan",
+            "かぞく": "kazoku",
+            "あおぞら": "aozora",
+            "でんしけいさんき": "denshikeisanki",
+            "ぱそこん": "pasokon",
+            "れんだー": "renda",
+            "ほーむぺーじ": "houmupeeji",
+            "じどうしゃ": "jidousha",
+            "すいようび": "suiyoubi"
+        };
+        
+        const wordDisplay = document.getElementById('word-display');
+        const romajiHint = document.getElementById('romaji-hint');
+        const typedInput = document.getElementById('typed-input');
+        const startButton = document.getElementById('start-button');
+        const scoreDisplay = document.getElementById('score');
+        const timerDisplay = document.getElementById('timer');
+        const gameResult = document.getElementById('game-result');
+
+        let currentJapaneseWord = '';
+        let currentRomaji = '';
+        let score = 0;
+        let timeLeft = 60; 
+        let timerInterval;
+
+        // ランダムに単語とローマ字を選ぶ
+        function displayNewWord() {
+            const keys = Object.keys(wordPairs);
+            const randomIndex = Math.floor(Math.random() * keys.length);
+            currentJapaneseWord = keys[randomIndex];
+            currentRomaji = wordPairs[currentJapaneseWord];
+            
+            wordDisplay.textContent = currentJapaneseWord;
+            romajiHint.textContent = currentRomaji; // ローマ字ヒントを表示
+            typedInput.value = '';
+            typedInput.focus();
+        }
+
+        function startGame() {
+            score = 0;
+            timeLeft = 60;
+            scoreDisplay.textContent = `正解数: ${score}`;
+            gameResult.textContent = '';
+            
+            typedInput.disabled = false;
+            startButton.style.display = 'none';
+            
+            displayNewWord();
+            startTimer();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = `残り時間: ${timeLeft}秒`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            typedInput.disabled = true;
+            wordDisplay.textContent = "終了！";
+            romajiHint.textContent = '';
+            gameResult.textContent = `最終正解数: ${score}回！`;
+            startButton.textContent = 'もう一度プレイ';
+            startButton.style.display = 'block';
+        }
+
+        // --- イベントリスナー ---
+
+        startButton.addEventListener('click', startGame);
+
+        typedInput.addEventListener('input', () => {
+            const typedText = typedInput.value.toLowerCase();
+            
+            // 入力された文字が表示されているローマ字と完全に一致するかチェック
+            if (typedText === currentRomaji) {
+                score++;
+                scoreDisplay.textContent = `正解数: ${score}`;
+                displayNewWord();
+            } else {
+                // 部分一致の場合、現在の入力内容と正解のローマ字を比較し、
+                // 次に入力すべき文字のヒントを表示するなどの機能を追加可能
+            }
+        });
+        
+        // 初期表示
+        romajiHint.textContent = 'タイピングを始めましょう！';
+
+    </script>
+
+</body>
+</html>
