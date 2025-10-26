@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シンプルなWebGLゲーム</title>
+    <style>
+        /* CSSでキャンバスを中央に配置し、画面全体を使用する */
+        body {
+            margin: 0;
+            overflow: hidden; /* スクロールバーを非表示 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #222;
+        }
+        #gameCanvas {
+            border: 2px solid #00ffaa;
+            display: block; /* キャンバスの下にできる余白を削除 */
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <script src="game.js" defer></script>
+
+</body>
+</html>
